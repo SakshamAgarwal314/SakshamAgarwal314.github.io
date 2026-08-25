@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saksham Agarwal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-video">
+    <video src="background.mp4" autoplay muted loop playsinline></video>
+    <div class="header-scrim"></div>
+  </div>
+  <div class="header-inner">
+    <a href="#home" class="brand">Saksham Agarwal</a>
+    <nav class="nav">
+      <a href="#home" data-nav="home">Home</a>
+      <a href="#projects" data-nav="projects">Projects</a>
+      <a href="#experience" data-nav="experience">Experience</a>
+    </nav>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ============ HOME ============ -->
+  <section class="page" id="page-home">
+    <p class="kicker">The University of Texas at Austin</p>
+    <h1 class="display">Saksham Agarwal</h1>
+    <p class="lede">Hello! I'm Saksham, a Computer Science and Mathematics double major at UT Austin.</p>
+
+    <div class="two-col">
+      <div>
+        <h2 class="col-head">Interests</h2>
+        <ul class="plain-list">
+          <li>Predictive modeling</li>
+          <li>AI / ML / DS</li>
+          <li>SWE / SDE</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="col-head">More about me</h2>
+        <ul class="plain-list">
+          <li>I've been to 16 national parks</li>
+          <li>I took part in a Guinness World Record</li>
+          <li>I really enjoy watching TV shows, currently on The Sopranos</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="socials">
+      <a href="https://github.com/SakshamAgarwal314" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <img src="logo-github.png" alt="GitHub">
+      </a>
+      <a href="https://www.linkedin.com/in/saksham-agarwal314/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <img src="logo-linkedin.png" alt="LinkedIn">
+      </a>
+      <div class="tooltip-wrap">
+        <span class="tooltip">saksham_agarwal@utexas.edu</span>
+        <a href="mailto:saksham_agarwal@utexas.edu" aria-label="Email saksham_agarwal@utexas.edu">
+          <img src="logo-email.png" alt="Email">
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section class="page" id="page-projects" hidden>
+    <h1 class="page-title">Projects</h1>
+    <div class="rows">
+      <div class="row">
+        <div><h2 class="row-title">Soccer World Cup Prop Market Pricing</h2></div>
+        <div>
+          <ul class="bullets">
+            <li>Analyzed past match data to determine probabilities of prop bets (number of offsides, SOT, BTTS, penalties, etc.)</li>
+            <li>Built a data pipeline to pull, cache, and clean historical data from an API</li>
+          </ul>
+          <p class="tech">Python &middot; NumPy &middot; pandas</p>
+        </div>
+      </div>
+      <div class="row">
+        <div><h2 class="row-title">Monopoly as a Markov Chain</h2></div>
+        <div>
+          <ul class="bullets">
+            <li>Modeled Monopoly as a 40-state Markov chain, including game mechanics and rules. Solved the stationary distribution using the loss function and left eigenvector method</li>
+            <li>Ranked property color sets by ROI and found Orange to be the best color set</li>
+          </ul>
+          <p class="tech">Python &middot; NumPy</p>
+        </div>
+      </div>
+      <div class="row">
+        <div><h2 class="row-title">Oil Forecasting</h2></div>
+        <div>
+          <ul class="bullets">
+            <li>Developed predictive models for oil production across 12 preproduction wells from 1,400+ sensor readings with calibrated confidence intervals</li>
+            <li>Reduced 120+ features to 31 using Spearman correlation and Gaussian filtering</li>
+          </ul>
+          <p class="tech">Python &middot; XGBoost &middot; scikit-learn &middot; NumPy &middot; pandas</p>
+        </div>
+      </div>
+      <div class="rule-end"></div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section class="page" id="page-experience" hidden>
+    <h1 class="page-title">Experience</h1>
+    <div class="rows">
+      <div class="row">
+        <div>
+          <h2 class="job-title">Computational Neuroscience Research Assistant</h2>
+          <p class="job-date">Apr 2026 &mdash; Present</p>
+        </div>
+        <ul class="bullets muted">
+          <li>Developing predictive models for neural activity during aging and Alzheimer's disease progression, and for quantifying brain-wide anatomical connectivity changes.</li>
+        </ul>
+      </div>
+      <div class="row">
+        <div>
+          <h2 class="job-title">Tutor</h2>
+          <p class="job-date">Oct 2025 &mdash; Present</p>
+        </div>
+        <ul class="bullets muted">
+          <li>Tutor students in AP Calculus, AP Statistics, college calculus, and standardized exams, focusing on in-school excellence and AP exam preparation.</li>
+        </ul>
+      </div>
+      <div class="row">
+        <div>
+          <h2 class="job-title">NASA SEES Summer Intern</h2>
+          <p class="job-date">Summer 2024</p>
+        </div>
+        <ul class="bullets muted">
+          <li>Conducted astrophysical research on open cluster NGC 4815, using photometric data to determine its age and distance. Built and ran data pipelines that isolated the cluster's evolutionary traits.</li>
+          <li>Co-authored &ldquo;Astrophysical Insights: Age and Distance Analysis of NGC 4815,&rdquo; accepted to the American Geophysical Union (AGU) and the IEEE MIT Undergraduate Research Technology Conference.</li>
+        </ul>
+      </div>
+      <div class="rule-end"></div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // ---- Tab switching: show one .page, hide the rest ----
+  var PAGES = ['home', 'projects', 'experience'];
+
+  function showPage(name) {
+    if (PAGES.indexOf(name) === -1) name = 'home';
+    PAGES.forEach(function (p) {
+      document.getElementById('page-' + p).hidden = (p !== name);
+      document.querySelector('[data-nav="' + p + '"]').classList.toggle('is-active', p === name);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  function pageFromHash() {
+    return (location.hash || '').replace('#', '') || 'home';
+  }
+
+  window.addEventListener('hashchange', function () { showPage(pageFromHash()); });
+  showPage(pageFromHash());
+</script>
+
+</body>
+</html>
