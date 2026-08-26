@@ -5,15 +5,395 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Saksham Agarwal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&display=swap">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=News+Cycle:wght@700&family=Archivo:wght@400;500;600;800&display=swap">
+<style>
+/* ---------- tokens ---------- */
+:root {
+  --ink: #201e1d;
+  --ground: #ffffff;
+  --accent: #16305c;
+  --rule: rgba(32, 30, 29, 0.4);
+  --muted: rgba(32, 30, 29, 0.7);
+  --label: rgba(32, 30, 29, 0.55);
+  --night: #0a0c14;
+  --page-max: 1000px;
+  --page-pad: 32px;
+}
+
+/* ---------- base ---------- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: Archivo, system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+a { color: var(--ink); text-decoration: none; }
+a:hover { color: var(--accent); }
+
+h1, h2 { font-weight: 800; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--night);
+  border-bottom: 2px solid var(--rule);
+}
+
+.header-video {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* Oversized + rotated so the Milky Way band runs near-horizontal
+   across the thin header strip, with no empty corners. */
+.header-video video {
+  position: absolute;
+  left: 0;
+  top: -100%;
+  width: 100%;
+  height: 300%;
+  object-fit: cover;
+  display: block;
+  transform: rotate(-10deg);
+}
+
+.header-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 12, 20, 0.45);
+}
+
+/* Star Wars crawl — headings recede up a tilted plane as they scroll under */
+.crawl-stage {
+  position: absolute;
+  inset: 0;
+  perspective: 700px;
+  perspective-origin: 50% 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.crawl-plane {
+  position: absolute;
+  inset: 0;
+  transform: rotateX(40deg);
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+}
+
+.crawl-line {
+  position: absolute;
+  font-family: 'News Cycle', Archivo, sans-serif;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: #ffe81f;
+  text-shadow: 0 0 20px rgba(255, 232, 31, 0.5);
+  line-height: 1;
+  opacity: 0;
+  transform-origin: 50% 100%;
+}
+
+.header-inner {
+  position: relative;
+  padding: 44px var(--page-pad);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  color: #f6f6f6;
+  font-weight: 800;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+}
+.brand:hover { color: #fff; }
+
+.nav {
+  display: flex;
+  align-items: baseline;
+  gap: 26px;
+}
+
+.nav a {
+  font-size: 24px;
+  font-weight: 600;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+  color: rgba(246, 246, 246, 0.65);
+}
+.nav a:hover { color: #fff; }
+.nav a.is-active { color: #fff; border-bottom-color: #fff; }
+
+/* ---------- layout ---------- */
+.main {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 var(--page-pad) 96px;
+}
+
+.page[hidden] { display: none; }
+
+/* ---------- home ---------- */
+#page-home { padding: 80px 0; }
+
+.kicker {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: rgba(32, 30, 29, 0.65);
+  margin: 0 0 24px;
+}
+
+.display {
+  font-size: 72px;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin: 0 0 28px;
+  max-width: 16ch;
+}
+
+.lede {
+  font-size: 20px;
+  line-height: 1.5;
+  max-width: 52ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px;
+  margin-top: 44px;
+  max-width: 700px;
+}
+
+.col-head {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--label);
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--rule);
+}
+
+.plain-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+  font-size: 16px;
+}
+
+/* ---------- socials + email tooltip ---------- */
+.socials {
+  display: flex;
+  gap: 12px;
+  margin-top: 44px;
+  flex-wrap: wrap;
+}
+
+.socials a { display: block; width: 72px; height: 72px; transition: opacity 120ms; }
+.socials a:hover { opacity: 0.6; }
+.socials img { width: 100%; height: 100%; display: block; }
+
+.tooltip-wrap { position: relative; }
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: #f6f6f6;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 8px 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms;
+}
+.tooltip-wrap:hover .tooltip { opacity: 1; }
+
+/* ---------- projects + experience rows ---------- */
+#page-projects, #page-experience { padding-top: 72px; }
+
+.page-title {
+  font-size: 48px;
+  letter-spacing: -0.03em;
+  margin: 0 0 32px;
+}
+
+.rows { display: grid; }
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 32px;
+  padding: 32px 0;
+  border-top: 2px solid var(--rule);
+  align-items: start;
+}
+
+.rule-end { border-top: 2px solid var(--rule); }
+
+.row-title { font-size: 26px; letter-spacing: -0.02em; margin: 0; }
+
+.job-title {
+  font-size: 24px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+
+.job-date {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--label);
+  margin: 0;
+}
+
+.bullets {
+  margin: 0;
+  padding: 0 0 0 1.1em;
+  display: grid;
+  gap: 10px;
+  max-width: 54ch;
+}
+
+.bullets li { font-size: 16px; line-height: 1.55; text-wrap: pretty; }
+.bullets.muted li { color: rgba(32, 30, 29, 0.8); }
+
+.tech {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 16px 0 0;
+  color: var(--muted);
+}
+
+/* ---------- project tags ---------- */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  padding: 7px 10px;
+}
+
+/* Type tags: filled, not clickable. Violet and indigo — same weight, one family. */
+.tag-competition { background: #4c2a85; color: #fff; }
+.tag-personal { background: #2a3d85; color: #fff; }
+
+/* Placeholder link tags — swap the <span> for
+   <a class="tag tag-link" href="URL" target="_blank" rel="noopener noreferrer">
+   once you have the real URL. */
+.tag-todo {
+  border: 2px solid #9c7c22;
+  color: #7a5f14;
+}
+
+/* Link tags: outlined, so actionable reads differently from metadata. */
+.tag-link {
+  border: 2px solid #9c7c22;
+  color: #7a5f14;
+}
+.tag-link:hover {
+  background: #7a5f14;
+  border-color: #7a5f14;
+  color: #fff;
+}
+
+/* ---------- mobile ---------- */
+@media (max-width: 720px) {
+  :root { --page-pad: 20px; }
+  /* Star Wars crawl — the page title, receding into the star field */
+.crawl-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 320px;
+  perspective-origin: 50% 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.crawl {
+  display: block;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: #ffe81f;
+  text-shadow: 0 0 18px rgba(255, 232, 31, 0.45);
+  font-size: 52px;
+  line-height: 1;
+  opacity: 0;
+  transform: rotateX(62deg) translateY(80px) scale(0.7);
+  transform-origin: 50% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crawl { transition: none; }
+}
+
+.header-inner { padding: 24px var(--page-pad); }
+  .display { font-size: 44px; }
+  .crawl-line { font-size: 24px !important; }
+  .lede { font-size: 17px; }
+  .page-title { font-size: 34px; }
+  .two-col { grid-template-columns: 1fr; gap: 28px; }
+  .row { grid-template-columns: 1fr; gap: 16px; }
+}
+
+</style>
 </head>
 <body>
 
 <header class="site-header">
   <div class="header-video">
-    <video src="background.mp4" autoplay muted loop playsinline></video>
+    <video src="background.mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video>
     <div class="header-scrim"></div>
+  </div>
+  <div class="crawl-stage">
+    <div class="crawl-plane" id="crawl"></div>
   </div>
   <div class="header-inner">
     <a href="#home" class="brand">Saksham Agarwal</a>
@@ -54,15 +434,15 @@
 
     <div class="socials">
       <a href="https://github.com/SakshamAgarwal314" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-        <img src="logo-github.png" alt="GitHub">
+        <img src="data:image/png;base64,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" alt="GitHub">
       </a>
       <a href="https://www.linkedin.com/in/saksham-agarwal314/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-        <img src="logo-linkedin.png" alt="LinkedIn">
+        <img src="data:image/png;base64,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" alt="LinkedIn">
       </a>
       <div class="tooltip-wrap">
         <span class="tooltip">saksham_agarwal@utexas.edu</span>
         <a href="mailto:saksham_agarwal@utexas.edu" aria-label="Email saksham_agarwal@utexas.edu">
-          <img src="logo-email.png" alt="Email">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAgKADAAQAAAABAAAAgAAAAABIjgR3AAALwUlEQVR4Ae2df8xXVR3HQ8DyFzJSnqgE+4FsiThnNVHUBxSnaVi5NDdWNFvW2qK/tD/KvmzO6Pf8sSXmZCqJbaZQMxPB5wFBKZNFhDJxhQ2NzJAEoZAfvd7tOXqfZ99z7v1+4dx7zr3ns72fe+/5fM6Pz4/v+XV/PMPe0R2NItt00Asmg0ngODAaJPJvgR1U8Tp4HvwZ9IF+oDSvNI3SF4M94GBCUDbYjT/uA+eAw05nUGI/SE6PwwaP46vTwSHTSEr4PtgHkvPjssGb+Gw+kA+7oh5yPQWS4+O2wRp8OLbTCDiZDJtBcn49bKDJ4gRQiE5EahNIzq+XDV7Ap+rVnaTxInX79XJ89oe8Gv+OyEbA8OwF55o0XDUkLV3WxwLjUUU/8hVGpWHmhOMU8AwYFCEZfjqthwW0ovsoWC91jtCfAbqFY3K+sUZ9j/Lxj4x6pgeYSsKTJjEdG2EB7equMT3A3EaonJTMWuCrulAPoBs728BRIFFzLKB7Bz3qAWaA5PzmON5oejQnvQqA801KOjbOAtMVAKc1Tu2ksLHAZAXAh81VOjbOAhMVAGMap3ZS2FhgjFYB+4ECIVHzLHBAAaCbBYkaaoH0y2+o443aKQCMJRp6TAHQUMcbtVMAGEs09JgCoKGON2qnADCWaOgxBUBDHW/UTgFgLNHQYwqAhjreqJ0CwFiioccUAA11vFE7BYCxREOPKQAa6nijdgoAY4mGHqt6EURPpOqN1Vcbavehap9AwilAD2qWTtmXB32fb0S7K0ElipZu2c4qlE30XuazwLcfsuWXVtlPUKyqHoeqoyHZSK/pZZ3k87yUin4QjfnDaaje3/PpeFO290rWosjQ19DDMXO4LVFP8DQwjvJ19F7BBeHaOPiWzfQdAL4fCn0JBU4aUCLP2hMQmJgnVBO+vr/0YgFd5B/ZcFwB2a5FfHUtKlcfLixKmgX/CvhsTwhlS8dOVkH6MKe3dvveCFL0FiXtDXwaLCiaIUI56SYdpWtR2lpUsBs53wHwRoeN0ksqXwHfAIr6upB0mQekm3TshDq1YSdlV/ZGkD5j6loZ3Az/i0Bfu4ydpIN0aTkUkS0Oy6ddHXW0ZfnuAdpWSqK6wQeBayy8G/4l4HUQK+2i4ZcD6WKjd8HQOC+blE5VBYAUnQX6wFhdWGgF6fqWjddx0FL3oSZvo4DzwSOOgsbAewx81iHjlVVlAEixjwN9mNK1/NsA/1zwHIiF9FVOtXmdo8EfgKcPcynAK6OqA0CKfxAoCM7WhYW2kH4OWGXhh5S8lsboq2sKAhvpO33SeZJNoKz0EAJAur4bLAOX6cJCr5F+EfiFhR9C8hIaMQO4bnPPhK/v+feAyimUAJAhjgEyoJZKNvovjKtBiDeXbqVdV4A9wEZzYDwMjrMJlJ0eUgBIdy2Hfgrmg2GgHWlNfR3QXsGBdgIlp5k1/tdz2nM9/IVgZMntc1YXWgCYxhYxlvYKrgT/MZkqOO6lztmg5ahbQX07UFAHR6EGgAz1BfAbMEoXFvol6dor2GHh+0zeSeGfBK77HRrWloJrQZAUcgDIYBeCJ8D7dGGhftK1lPqbhe8j+WUKPQ9o4mqjHhgrwaU2gRDSQw8A2WgKUBC4lkwb4Wvp9Ufgm4rU9SEaoTaf6bsxh1p+DAEgHYtsmphf5aOHahRH/j54eb1Nkc0tRxXlsmIJAFlF26bLgWvbVOPyLOAal2F3RZpvfAK45hva91eQnAiioJgCQAZ9J1gMvqYLC5mZ+TwLv5vkW8iUt+K4BpkHgOsGVzd1e80TWwDIGMPBbUDLQFv7D8Jrgby1OSJOUjnXgbnAtueg/YoWuBOMAFGRzYAxKCHn3g2OdDT2VnhXgD0OGRuryK6jHH4H+I6tkNDTYw4A2XY2eAQcrwsLLSF9BnDtzw/NqvsO2rN33Xc4Fv6vwZdAtBR7AMjwcu5K8F5dWEh36LRuf9HCzyZv4UJ3HrWMs5HqWg0utgnEkl6HAJCtTwdPDxx13Y6eI/EssK4dcyBtA8e8Zw8+gsyTQHVGT3UJADlCv8qFQJNEG22D0QuWtRFQmn75W9vwTJLKXgQmmITYj3UKgD6coS55f45TdsLX9uzPMnL3cH4ZEM9FKltzg9+6hGLijYipsZa2HiT9RtACtqUarEG0jyvdoHllIPXbHFVOEfoXQgqgFvgW0DIwWoo9APTE8BzwUBcekMPlwG5IgXYD0OTyXqBdyigp5iFAN37OAHnOvwAZ7SB2SsqjvC7S7eqPgTJuQrna0TUv1gBYhMaasP3Fobl6t/ngMaD5gT7DUpRGI6ibSsvBAuB6ikdtmAruBFGSukJfaFksovRu6tTTP3MtZWaTdTNmBcjWsZHr8Vkhy7lWE/pFZ/M+wbXS8+jzCOwG2bxFz1uWwpVetIyO5WLqAbZiiF6gewAumgZzPZgxREjrd43ZGjZsNBmGZIau8VWmgmJomSQNonu4kuxfB6UGfHFEwG3LNq2fCz1LL+e46MswHwfjLEJKXwUubsOXc1eDk9rwlKRe5VFwPXDN/LXRpHmBZIOn0ANAXdpN4ELwD4c1tS9/P1gAXOO1ipDsUnADOHkAOs+7p4DI/+/2zeeoW9Iqx0Zmqai2S4egqeNxA22K5mlZNFd6Xhn/RuYzlvzZ5FO40BZuXnmHm7+JOk/NNsRyrj2D7SCv/pYlv9Lz8nbND7UH0Bh+JngQuGgWzN8Djd1l0yQq1JCkB0Vc9DBMzTv+4BKqihdiAPwcY2iJ94LDKMPhqSteAo53yPlmaRjQLeO8oUd3Ic8Fd4GgKKQA2IdlvglmgzccVtJkTHvxeZMxRxGHnaXJp5ad4xwlawl7DbgW7HXIlcoKJQBeQuvzwPdytNdKQF2pJoWhkX7hapt6LxfdAfNssMUlVBYvhABYibJy7FM5SutXtgaMz5Grkq3Non6g3slFz8DUUlG7lJVSlQGgmauetp0JtjmscBS8hUDj7JEOuVBYI2iI5if3gWMcjXoV3iVgHjjgkPPKqioAdBdPs2dt677p0HAivN+BOQ6ZUFlX0zANCdqBtNF+GC1wOXgNVEJdryFpbV7elkWjYZb0bPKnuNBeQF4dofOlg3TJI5tNWmT0pqPvHsDWBUohG5klnvYARtmEIkqXDtJFw4J0s5HNJjYb2srpON1bdNESjYOd0FiEtZzy2aYqy5Zu0rETuh9hb21Wt6PCfdHLFPx+ULSOU5F1raV9tbPMcv9OZRsLVqgeeivwahNv0UXDVXaIa3aaFQVdRCt9+8d7Bdqrd419UXiigkZqOalVRPQBIAV+WIEBY6/yxyU4X77xHmEmgm+mLkV1IrcFRsK+DRi7+T6WVpEUeRZcBY4GiQZbQMu9z4FNwLfT3yrf9ypgsIpvX+3mdDP459tJjT7T0lC7ntr2LpWqCoBSlUyV2S3geyfQXnPiBGGBFABBuKG6RqQAqM72QdScAiAIN1TXiBQA1dk+iJpTAAThhuoakQKgOtsHUXMKgCDcUF0jUgBUZ/sgak4BEIQbqmtECoDqbB9EzSkAgnBDdY1IAVCd7YOoOQVAEG6orhEKgMpeS6pO7VTzgAUOKABcr2InS9XbAjsVANvrrWPSzmGB7QoA15c4HHkTqwYW2KwA+FMNFEkqdGeBDQqAld3lTblqYIE+PRSqt1f1gYbSn0itgQFjVkGT//eoB9DHGpbGrElqe1cWeIhcuxQAIr21k6hZFrhd6poAWMt5X7P0b7S2+jjVGllAcwBDp3GyDqT394xF6nnU9xj1Vbb1Ui/72vYrXOv9tGliJKqtBb6LZott2unNVHUNb708mM5rZYtV+DO3hz8BoVLfUE1BVkqQ6WXcHlCIJiD1PEg9QT1soB90x19Y1SvLq1MQRP8jULevXr0r0nhxE9DXPFNvEJcN9uKzG0HumI9MLk1BYjlIQRCHDZbhq8m5Xu1CYCp5FgHtI6dgCMsGu/DJveAsUJiyG0GFMyF4LOgF04E2kPR5k9ED4JDIswV2UL6gibr+X1I/6AMdP931PwwxWuLwefHGAAAAAElFTkSuQmCC" alt="Email">
         </a>
       </div>
     </div>
@@ -73,7 +453,14 @@
     <h1 class="page-title">Projects</h1>
     <div class="rows">
       <div class="row">
-        <div><h2 class="row-title">Soccer World Cup Prop Market Pricing</h2></div>
+        <div>
+          <h2 class="row-title">Soccer World Cup Prop Market Pricing</h2>
+          <div class="tags">
+            <span class="tag tag-personal">Personal project</span>
+            <span class="tag tag-todo" title="Add the URL for this link">GitHub</span>
+            <span class="tag tag-todo" title="Add the URL for this link">Writeup (PDF)</span>
+          </div>
+        </div>
         <div>
           <ul class="bullets">
             <li>Analyzed past match data to determine probabilities of prop bets (number of offsides, SOT, BTTS, penalties, etc.)</li>
@@ -83,7 +470,14 @@
         </div>
       </div>
       <div class="row">
-        <div><h2 class="row-title">Monopoly as a Markov Chain</h2></div>
+        <div>
+          <h2 class="row-title">Monopoly as a Markov Chain</h2>
+          <div class="tags">
+            <span class="tag tag-personal">Personal project</span>
+            <a class="tag tag-link" href="https://github.com/SakshamAgarwal314/Monopoly-Strategy-Optimizer" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a class="tag tag-link" href="MonopolyStrategyOptimizer.pdf" target="_blank" rel="noopener noreferrer">Writeup (PDF)</a>
+          </div>
+        </div>
         <div>
           <ul class="bullets">
             <li>Modeled Monopoly as a 40-state Markov chain, including game mechanics and rules. Solved the stationary distribution using the loss function and left eigenvector method</li>
@@ -93,13 +487,53 @@
         </div>
       </div>
       <div class="row">
-        <div><h2 class="row-title">Oil Forecasting</h2></div>
+        <div>
+          <h2 class="row-title">Oil Forecasting</h2>
+          <div class="tags">
+            <span class="tag tag-competition">Hackathon &mdash; 5th place</span>
+            <span class="tag tag-todo" title="Add the URL for this link">GitHub</span>
+            <span class="tag tag-todo" title="Add the URL for this link">Writeup (PDF)</span>
+          </div>
+        </div>
         <div>
           <ul class="bullets">
             <li>Developed predictive models for oil production across 12 preproduction wells from 1,400+ sensor readings with calibrated confidence intervals</li>
             <li>Reduced 120+ features to 31 using Spearman correlation and Gaussian filtering</li>
           </ul>
           <p class="tech">Python &middot; XGBoost &middot; scikit-learn &middot; NumPy &middot; pandas</p>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <h2 class="row-title">IMC Prosperity</h2>
+          <div class="tags">
+            <span class="tag tag-competition">Competition &mdash; Top 5%</span>
+            <span class="tag tag-todo" title="Add the URL for this link">GitHub</span>
+            <span class="tag tag-todo" title="Add the URL for this link">Writeup (PDF)</span>
+          </div>
+        </div>
+        <div>
+          <ul class="bullets">
+            <li>Developed algorithmic trading bots over 5 rounds and submitted manual predictions based on game theory principles</li>
+            <li>Placed in the top 5% of all finalist teams globally</li>
+          </ul>
+          <p class="tech">Python</p>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <h2 class="row-title">CAS Case Competition</h2>
+          <div class="tags">
+            <span class="tag tag-competition">Competition &mdash; 2nd place</span>
+            <a class="tag tag-link" href="CAS-Case-Competition.pdf" target="_blank" rel="noopener noreferrer">Presentation (PDF)</a>
+          </div>
+        </div>
+        <div>
+          <ul class="bullets">
+            <li>Built a frequency-severity model to price a mobile warranty from imperfect data, applying tail risk and accounting for moral hazard and adverse selection</li>
+            <li>Presented to senior experts in the insurance industry and earned 2nd place.</li>
+          </ul>
+          <p class="tech">Python &middot; Excel</p>
         </div>
       </div>
       <div class="rule-end"></div>
@@ -138,6 +572,26 @@
           <li>Co-authored &ldquo;Astrophysical Insights: Age and Distance Analysis of NGC 4815,&rdquo; accepted to the American Geophysical Union (AGU) and the IEEE MIT Undergraduate Research Technology Conference.</li>
         </ul>
       </div>
+      <div class="row">
+        <div>
+          <h2 class="job-title">Role or title</h2>
+          <p class="job-date">Month 20XX &mdash; Month 20XX</p>
+        </div>
+        <ul class="bullets muted">
+          <li>What you did, and what it was for.</li>
+          <li>The outcome, with a number if you have one.</li>
+        </ul>
+      </div>
+      <div class="row">
+        <div>
+          <h2 class="job-title">Role or title</h2>
+          <p class="job-date">Month 20XX &mdash; Month 20XX</p>
+        </div>
+        <ul class="bullets muted">
+          <li>What you did, and what it was for.</li>
+          <li>The outcome, with a number if you have one.</li>
+        </ul>
+      </div>
       <div class="rule-end"></div>
     </div>
   </section>
@@ -155,11 +609,65 @@
       document.querySelector('[data-nav="' + p + '"]').classList.toggle('is-active', p === name);
     });
     window.scrollTo(0, 0);
+    syncCrawl();
   }
 
   function pageFromHash() {
     return (location.hash || '').replace('#', '') || 'home';
   }
+
+  // ---- Star Wars crawl: the page title reappears over the video as it scrolls under ----
+  var crawl = document.getElementById('crawl');
+  var raf = null;
+
+  function syncCrawl() {
+    var header = document.querySelector('.site-header');
+    if (!crawl || !header) return;
+    var h = header.offsetHeight;
+    var heads = document.querySelectorAll('.page:not([hidden]) h1, .page:not([hidden]) h2');
+
+    // rebuild when the headings themselves change, not just their count
+    var stale = crawl.childElementCount !== heads.length;
+    if (!stale) {
+      for (var i = 0; i < heads.length; i++) {
+        if (crawl.children[i].textContent !== heads[i].textContent.trim()) { stale = true; break; }
+      }
+    }
+    if (stale) {
+      crawl.textContent = '';
+      heads.forEach(function (n) {
+        var t = n.textContent.trim();
+        var line = document.createElement('span');
+        line.className = 'crawl-line';
+        line.textContent = t;
+        line.style.fontSize = (t.length > 30 ? 24 : t.length > 18 ? 32 : 42) + 'px';
+        crawl.appendChild(line);
+      });
+    }
+
+    // Side-by-side headings share a y, so give each one its own slot in the stack.
+    var prevTop = null, slot = 0;
+    heads.forEach(function (node, i) {
+      var line = crawl.children[i];
+      if (!line) return;
+      var r = node.getBoundingClientRect();
+      var top = Math.round(r.top);
+      slot = prevTop !== null && Math.abs(top - prevTop) < 8 ? slot + 1 : 0;
+      prevTop = top;
+      // 0 as the heading meets the header, 1 once fully under, then keeps growing
+      var base = (h - r.top) / Math.max(r.height, 1);
+      if (base <= 0) { line.style.opacity = 0; return; }
+      var q = base + slot * 0.9;
+      line.style.opacity = Math.min(q, 1) * Math.max(0, 1 - (q - 1) / 4);
+      line.style.transform = 'translateY(' + (-4 - 26 * q) + 'px) scale(' + (1 / (1 + 0.28 * q)) + ')';
+    });
+  }
+
+  window.addEventListener('scroll', function () {
+    if (raf) return;
+    raf = requestAnimationFrame(function () { raf = null; syncCrawl(); });
+  }, { passive: true });
+  window.addEventListener('resize', syncCrawl);
 
   window.addEventListener('hashchange', function () { showPage(pageFromHash()); });
   showPage(pageFromHash());

@@ -63,10 +63,45 @@ h1, h2 { font-weight: 800; }
   background: rgba(10, 12, 20, 0.45);
 }
 
+/* Star Wars crawl — headings recede up a tilted plane as they scroll under */
+.crawl-stage {
+  position: absolute;
+  inset: 0;
+  perspective: 700px;
+  perspective-origin: 50% 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.crawl-plane {
+  position: absolute;
+  inset: 0;
+  transform: rotateX(40deg);
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+}
+
+.crawl-line {
+  position: absolute;
+  font-family: 'News Cycle', Archivo, sans-serif;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: #ffe81f;
+  text-shadow: 0 0 20px rgba(255, 232, 31, 0.5);
+  line-height: 1;
+  opacity: 0;
+  transform-origin: 50% 100%;
+}
+
 .header-inner {
   position: relative;
-  max-width: var(--page-max);
-  margin: 0 auto;
   padding: 44px var(--page-pad);
   display: flex;
   align-items: baseline;
@@ -78,7 +113,7 @@ h1, h2 { font-weight: 800; }
 .brand {
   color: #f6f6f6;
   font-weight: 800;
-  font-size: 17px;
+  font-size: 30px;
   letter-spacing: -0.02em;
 }
 .brand:hover { color: #fff; }
@@ -90,9 +125,9 @@ h1, h2 { font-weight: 800; }
 }
 
 .nav a {
-  font-size: 14px;
+  font-size: 24px;
   font-weight: 600;
-  padding-bottom: 3px;
+  padding-bottom: 4px;
   border-bottom: 2px solid transparent;
   color: rgba(246, 246, 246, 0.65);
 }
@@ -254,11 +289,85 @@ h1, h2 { font-weight: 800; }
   color: var(--muted);
 }
 
+/* ---------- project tags ---------- */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  padding: 7px 10px;
+}
+
+/* Type tags: filled, not clickable. Violet and indigo — same weight, one family. */
+.tag-competition { background: #4c2a85; color: #fff; }
+.tag-personal { background: #2a3d85; color: #fff; }
+
+/* Placeholder link tags — swap the <span> for
+   <a class="tag tag-link" href="URL" target="_blank" rel="noopener noreferrer">
+   once you have the real URL. */
+.tag-todo {
+  border: 2px solid #9c7c22;
+  color: #7a5f14;
+}
+
+/* Link tags: outlined, so actionable reads differently from metadata. */
+.tag-link {
+  border: 2px solid #9c7c22;
+  color: #7a5f14;
+}
+.tag-link:hover {
+  background: #7a5f14;
+  border-color: #7a5f14;
+  color: #fff;
+}
+
 /* ---------- mobile ---------- */
 @media (max-width: 720px) {
   :root { --page-pad: 20px; }
-  .header-inner { padding: 24px var(--page-pad); }
+  /* Star Wars crawl — the page title, receding into the star field */
+.crawl-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 320px;
+  perspective-origin: 50% 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.crawl {
+  display: block;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: #ffe81f;
+  text-shadow: 0 0 18px rgba(255, 232, 31, 0.45);
+  font-size: 52px;
+  line-height: 1;
+  opacity: 0;
+  transform: rotateX(62deg) translateY(80px) scale(0.7);
+  transform-origin: 50% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crawl { transition: none; }
+}
+
+.header-inner { padding: 24px var(--page-pad); }
   .display { font-size: 44px; }
+  .crawl-line { font-size: 24px !important; }
   .lede { font-size: 17px; }
   .page-title { font-size: 34px; }
   .two-col { grid-template-columns: 1fr; gap: 28px; }
