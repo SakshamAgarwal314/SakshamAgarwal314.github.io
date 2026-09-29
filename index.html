@@ -249,6 +249,45 @@ h1, h2 { font-weight: 800; }
   margin: 0 0 32px;
 }
 
+/* Compact project filters */
+.projects-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.projects-heading .page-title { margin: 0; }
+.project-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.project-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.project-filter[aria-pressed="true"] {
+  background: #4c2a85;
+  border-color: #4c2a85;
+  color: #fff;
+}
+.project-filter[data-filter="personal"][aria-pressed="true"] {
+  background: #2a3d85;
+  border-color: #2a3d85;
+}
+.project-filter:hover { filter: brightness(0.9); }
+.row[hidden] { display: none; }
+.project-filter-empty { margin: 0; padding: 24px 0; color: var(--muted); }
+@media (pointer: coarse) {
+  .project-filter { min-height: 44px; }
+}
+
 .rows { display: grid; }
 
 .row {
@@ -458,9 +497,15 @@ h1, h2 { font-weight: 800; }
 
   <!-- ============ PROJECTS ============ -->
   <section class="page" id="page-projects" hidden>
-    <h1 class="page-title">Projects</h1>
-    <div class="rows">
-      <div class="row">
+    <div class="projects-heading">
+      <h1 class="page-title">Projects</h1>
+      <div class="project-filters" role="group" aria-label="Filter projects by type">
+        <button class="project-filter" type="button" data-filter="competition" aria-pressed="true" aria-controls="project-rows"><span aria-hidden="true">✓</span>Competition</button>
+        <button class="project-filter" type="button" data-filter="personal" aria-pressed="true" aria-controls="project-rows"><span aria-hidden="true">✓</span>Personal project</button>
+      </div>
+    </div>
+    <div class="rows" id="project-rows">
+      <div class="row" data-category="personal">
         <div>
           <h2 class="row-title">Soccer World Cup Prop Market Pricing</h2>
           <div class="tags">
@@ -477,7 +522,7 @@ h1, h2 { font-weight: 800; }
           <p class="tech">Python &middot; NumPy &middot; pandas</p>
         </div>
       </div>
-      <div class="row">
+      <div class="row" data-category="personal">
         <div>
           <h2 class="row-title">Monopoly as a Markov Chain</h2>
           <div class="tags">
@@ -494,7 +539,7 @@ h1, h2 { font-weight: 800; }
           <p class="tech">Python &middot; NumPy</p>
         </div>
       </div>
-      <div class="row">
+      <div class="row" data-category="competition">
         <div>
           <h2 class="row-title">Oil Forecasting</h2>
           <div class="tags">
@@ -511,7 +556,7 @@ h1, h2 { font-weight: 800; }
           <p class="tech">Python &middot; XGBoost &middot; scikit-learn &middot; NumPy &middot; pandas</p>
         </div>
       </div>
-      <div class="row">
+      <div class="row" data-category="competition">
         <div>
           <h2 class="row-title">Akuna Capital Virtual Quant Trading Competition</h2>
           <div class="tags">
@@ -526,7 +571,7 @@ h1, h2 { font-weight: 800; }
           <p class="tech">Python</p>
         </div>
       </div>
-      <div class="row">
+      <div class="row" data-category="competition">
         <div>
           <h2 class="row-title">IMC Prosperity</h2>
           <div class="tags">
@@ -541,7 +586,7 @@ h1, h2 { font-weight: 800; }
           <p class="tech">Python</p>
         </div>
       </div>
-      <div class="row">
+      <div class="row" data-category="competition">
         <div>
           <h2 class="row-title">CAS Case Competition</h2>
           <div class="tags">
@@ -557,6 +602,7 @@ h1, h2 { font-weight: 800; }
           <p class="tech">Python &middot; Excel</p>
         </div>
       </div>
+      <p class="project-filter-empty" role="status" hidden>Select a project type to see projects.</p>
       <div class="rule-end"></div>
     </div>
   </section>
@@ -639,7 +685,9 @@ h1, h2 { font-weight: 800; }
     var header = document.querySelector('.site-header');
     if (!crawl || !header) return;
     var h = header.offsetHeight;
-    var heads = document.querySelectorAll('.page:not([hidden]) h1, .page:not([hidden]) h2');
+    var heads = Array.from(document.querySelectorAll('.page:not([hidden]) h1, .page:not([hidden]) h2')).filter(function (heading) {
+      return !heading.closest('[hidden]');
+    });
 
     // rebuild when the headings themselves change, not just their count
     var stale = crawl.childElementCount !== heads.length;
@@ -684,7 +732,21 @@ h1, h2 { font-weight: 800; }
   }, { passive: true });
   window.addEventListener('resize', syncCrawl);
 
-  window.addEventListener('hashchange', function () { showPage(pageFromHash()); });
+  // Both project types start selected; each button independently toggles a type.
+  document.querySelectorAll('.project-filter').forEach(function (button) {
+    button.addEventListener('click', function () {
+      var selected = button.getAttribute('aria-pressed') !== 'true';
+      button.setAttribute('aria-pressed', String(selected));
+      button.querySelector('span').textContent = selected ? '✓' : '+';
+      document.querySelectorAll('#project-rows .row').forEach(function (row) {
+        if (row.dataset.category === button.dataset.filter) row.hidden = !selected;
+      });
+      document.querySelector('.project-filter-empty').hidden = !!document.querySelector('#project-rows .row:not([hidden])');
+      syncCrawl();
+    });
+  });
+
+  window.addEventListener('hashchange' , function () { showPage(pageFromHash()); });
   showPage(pageFromHash());
 </script>
 
