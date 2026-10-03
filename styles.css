@@ -329,6 +329,13 @@ h1, h2 { font-weight: 800; }
 .bullets li { font-size: 16px; line-height: 1.55; text-wrap: pretty; }
 .bullets.muted li { color: rgba(32, 30, 29, 0.8); }
 
+.experience-note {
+  margin: 16px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
 .tech {
   font-size: 13px;
   font-weight: 600;
